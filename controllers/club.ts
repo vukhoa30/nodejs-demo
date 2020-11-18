@@ -51,10 +51,13 @@ const updateClubController = async (req: any, res: Response) => {
     modifier.country = { name: country };
   }
   const rslt = await upsertClub(modifier, id);
-  if (rslt) {
+  if (rslt && rslt.id) {
     res.status(201).json(rslt);
   } else {
-    return res.status(400).end('Error updating club. Probably the data already exists.')
+    if (rslt.id === 0) {
+      res.status(404).end()
+    }
+    res.status(400).end('Error updating club. Probably the data already exists.')
   }
 }
 

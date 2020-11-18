@@ -117,7 +117,7 @@ describe('club controller work correctly', () => {
   })
 
   test('Update a club (not found)', async () => {
-    const res = await request(app).get('/api/clubs/-1').send();
+    const res = await request(app).put('/api/clubs/-1').send();
     expect(res.status).toBe(404);
   })
 

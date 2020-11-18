@@ -35,10 +35,13 @@ const getClub = async (id: number) => {
 }
 
 
-const upsertClub = async (modifier: any, id?: string) => {
+const upsertClub = async (modifier: any, id?: number) => {
   let query = Club.query();
   if (id) { // is update instead of create
     modifier.id = id;
+    if (!(await Club.query().findById(id))) {
+      return { id: 0 }
+    }
   }
   if (modifier.country) {
     const country = await Country.query().where('name', '=', modifier.country.name);
