@@ -8,3 +8,4 @@ docker run -d --network=host \
   -e "DB_HOST=127.0.0.1" \
   --name foobar foo/bar
   
+Todo: finish the services, camelCase the app data, add Docker scripts, add tests

@@ -1,21 +1,29 @@
 import express from 'express';
+import {
+  getClubsController,
+  getClubController,
+  addClubController,
+  updateClubController,
+  deleteClubController
+} from '../controllers';
 
 const router = express.Router();
 
-router.get('/products/:id', (req, res) => {
-
-});
-
-router.get('/products', async (req: any, res) => {
-
-});
-
-router.get('/statistic/products/query', async (req: any, res) => {
-  
+router.use((req, res, next) => {
+  if (req.params.id && !Number(req.params.id)) {
+    return res.status(400).end('ID is invalid')
+  }
+  next()
 })
 
-router.get('/statistic/products/detail-view', async (req: any, res) => {
-  
-})
+router.get('/clubs/:id', getClubController);
+
+router.get('/clubs', getClubsController);
+
+router.post('/clubs', addClubController);
+
+router.put('/clubs/:id', updateClubController);
+
+router.delete('/clubs/:id', deleteClubController);
 
 export default router;

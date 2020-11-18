@@ -28,24 +28,7 @@ const createKnexClient = () => {
 const migrate = async () => {
   const knex = createKnexClient();
   try {
-
-    // delete this
-    try {
-      await knex.raw('drop table knex_migrations');
-      await knex.raw('drop table knex_migrations_lock');
-      await knex.raw('drop table if exists score')
-      await knex.raw('drop table if exists match')
-      await knex.raw('drop table if exists round')
-      await knex.raw('drop table if exists team')
-      // await knex('score').del();
-      // await knex('match').del();
-      // await knex('round').del();
-      // await knex('team').del();
-    } catch {}
-
     await knex.migrate.latest();
-
-
     console.log('Migration completed');
   } catch (e) {
     console.log('Error during migration:', e);
@@ -57,8 +40,12 @@ const migrate = async () => {
 const seed = async () => {
   const knex = createKnexClient();
   try {
-    await knex.seed.run();
-    console.log('Seeding completed');
+    if (await knex('club')) {
+      console.log('Data existing, skip seeding')
+    } else {
+      await knex.seed.run();
+      console.log('Seeding completed');
+    }
   } catch (e) {
     console.log('Error during seeding:', e);
   } finally {

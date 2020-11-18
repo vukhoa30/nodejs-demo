@@ -6,12 +6,26 @@ import routes from './routes';
 import { APP_PORT } from './configs/env';
 import { createKnexClient, migrate, seed } from './db';
 
+import { upsertClub } from './services';
+
 (async () => {
   try {
     const knex = createKnexClient();
     await migrate();
     await seed();
     Model.knex(knex);
+
+    // delete this
+    // ;(async ()=> {
+    //   console.log(await upsertClub({
+    //     id: 1,
+    //     name: 'Liverpool no4 FC',
+    //     country: {
+    //       // id: 2,
+    //       name: 'Vietnam3'
+    //     }
+    //   }));
+    // })()
   } catch (e) {
     console.log('Error migrating DB:', e)
   }
