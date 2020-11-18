@@ -1,5 +1,6 @@
 import { Model } from 'objection';
 import { Country } from '.';
+import { ENV } from '../configs/env';
 
 interface IClub {
   id: number;
@@ -45,7 +46,9 @@ class Club extends Model implements IClub {
   static query(...args: any[]) {
     return super.query(...args).onBuildKnex(knexQueryBuilder => {
       knexQueryBuilder.on('query', (queryData: any) => {
-        console.log('Raw SQL query:', queryData.sql);
+        if (ENV !== 'test') {
+          console.log('Raw SQL query:', queryData.sql);
+        }
       });
     });
   }

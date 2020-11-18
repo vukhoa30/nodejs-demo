@@ -49,3 +49,5 @@ app.use("/api", routes);
 
 // Starting the App
 app.listen(APP_PORT, () => { console.log(`Listening on port: ${APP_PORT}`) });
+
+export { app };

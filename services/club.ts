@@ -13,7 +13,10 @@ const getClubs = async (name?: string, code?: string, offset?: number, limit?: n
   if (limit) {
     query.limit(limit);
   }
-  const rows = await query.withGraphFetched('country').offset(offset).omit(['countryid']);
+  if (totalResult > 0) {
+    query.withGraphFetched('country').omit(['countryid']);
+  }
+  const rows = await query.offset(offset);
   // @ts-ignore
   rows.forEach(r => r.country = r.country.name);
 
@@ -23,8 +26,14 @@ const getClubs = async (name?: string, code?: string, offset?: number, limit?: n
   };
 }
 
-const getClub = (id: number) => Club.query().findById(id)
-                                  .withGraphFetched('country').omit(['countryid']);
+const getClub = async (id: number) => {
+  const rslt: any = await Club.query().findById(id).withGraphFetched('country').omit(['countryid']);
+  if (rslt) {
+    rslt.country = rslt.country.name;
+  }
+  return rslt;
+}
+
 
 const upsertClub = async (modifier: any, id?: string) => {
   let query = Club.query();
@@ -37,9 +46,13 @@ const upsertClub = async (modifier: any, id?: string) => {
       modifier.country = country;
     }
   }
-  return query.upsertGraphAndFetch(modifier, { relate: true, unrelate: true, insertMissing: true })
+  const rslt: any = await query.upsertGraphAndFetch(modifier, { relate: true, unrelate: true, insertMissing: true })
     .withGraphFetched('country').omit(['countryid'])
     .catch(e => console.log(e));
+  if (rslt) {
+    rslt.country = rslt.country.name;
+  }
+  return rslt;
 }
 
 const deleteClub = (id: number) => Club.query().deleteById(id);

@@ -37,7 +37,7 @@ const addClubController = async (req: any, res: Response) => {
   }
   const rslt = await upsertClub({ country: { name: country }, name, code });
   if (rslt) {
-    res.json(rslt);
+    res.status(201).json(rslt);
   } else {
     return res.status(400).end('Error adding new club. Probably the data already exists.')
   }
@@ -52,7 +52,7 @@ const updateClubController = async (req: any, res: Response) => {
   }
   const rslt = await upsertClub(modifier, id);
   if (rslt) {
-    res.json(rslt);
+    res.status(201).json(rslt);
   } else {
     return res.status(400).end('Error updating club. Probably the data already exists.')
   }
@@ -62,7 +62,7 @@ const deleteClubController = async (req: any, res: Response) => {
   const id = req.params.id;
   const rslt = await deleteClub(id);
   if (rslt) {
-    res.json(rslt);
+    res.status(201).json(rslt);
   } else {
     return res.status(404).end()
   }

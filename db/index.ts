@@ -2,7 +2,8 @@ import Knex from 'knex';
 import { resolve } from 'path';
 
 import {
-  DB_DIALECT, DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USERNAME, ENV
+  DB_DIALECT, DB_HOST, DB_NAME, DB_PASSWORD, DB_PORT, DB_USERNAME,
+  ENV, DB_NAME_TEST
 } from '../configs/env';
 
 const createKnexClient = () => {
@@ -13,7 +14,7 @@ const createKnexClient = () => {
       port: DB_PORT,
       user: DB_USERNAME,
       password: DB_PASSWORD,
-      database: ENV === 'test' ? `test${DB_NAME}` : DB_NAME
+      database: ENV === 'test' ? DB_NAME_TEST : DB_NAME
     },
     migrations: {
       extension: ENV === 'production' ? 'js' : 'ts',
@@ -40,7 +41,7 @@ const migrate = async () => {
 const seed = async () => {
   const knex = createKnexClient();
   try {
-    if (await knex('club')) {
+    if ((await knex('club')).length) {
       console.log('Data existing, skip seeding')
     } else {
       await knex.seed.run();

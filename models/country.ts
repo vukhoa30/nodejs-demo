@@ -1,4 +1,5 @@
 import { Model } from 'objection';
+import { ENV } from '../configs/env';
 
 interface ICountry {
   id: number;
@@ -17,7 +18,9 @@ class Country extends Model implements ICountry {
   static query(...args: any[]) {
     return super.query(...args).onBuildKnex(knexQueryBuilder => {
       knexQueryBuilder.on('query', (queryData: any) => {
-        console.log('Raw SQL query:', queryData.sql);
+        if (ENV !== 'test') {
+          console.log('Raw SQL query:', queryData.sql);
+        }
       });
     });
   }
